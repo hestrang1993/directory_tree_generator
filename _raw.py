@@ -1,3 +1,9 @@
+"""
+_raw is a direct copy from the source files.
+
+_raw is used to help troubleshoot bugs.
+"""
+
 import os
 import pathlib
 
