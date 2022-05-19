@@ -21,7 +21,7 @@ _SPACE_PREFIX = "    "
 class TreeGenerator:
     """_TreeGenerator traverses the file system and generates the directory tree diagram."""
 
-    def __init__(self, root_dir):
+    def __init__(self, root_dir, dir_only=False):
         """
         __init__ creates a new _TreeGenerator instance.
 
@@ -29,9 +29,13 @@ class TreeGenerator:
         ----------
         root_dir : str
             The absolute path to the root directory.
+        dir_only: bool
+            A flag to generate and display directory-only tree diagrams (True) or not (False).
         """
         self._root_dir = pathlib.Path(root_dir)
         """pathlib.Path: The root directory"""
+        self._dir_only = dir_only
+        """bool: A flag to generate and display directory-only tree diagrams (True) or not (False)"""
         self._tree = []
         """list: A list to store the entries that shape the directory tree diagram"""
 
@@ -81,12 +85,32 @@ class TreeGenerator:
         -------
         None
         """
-        entries = directory.iterdir()
-        entries = sorted(entries, key=lambda entry: entry.is_file())
+        entries = self._prepare_entries(directory)
         entries_count = len(entries)
         for index, entry in enumerate(entries):
             connector = _ELBOW if index == entries_count - 1 else _TEE
             self._check_if_dir(entry, index, entries_count, prefix, connector)
+
+    def _prepare_entries(self, directory):
+        """
+        _prepare_entries prepares the directory entries to generate either a full tree or a directory-only tree.
+
+        Parameters
+        ----------
+        directory : pathlib.Path
+            The path to the directory you want to walk through.
+
+        Returns
+        -------
+        list
+            A list of entries in the directory.
+        """
+        entries = directory.iterdir()
+        if self._dir_only:
+            entries = [entry for entry in entries if entry.is_dir()]
+            return entries
+        entries = sorted(entries, key=lambda entry: entry.is_file())
+        return entries
 
     def _check_if_dir(self, entry, index, entries_count, prefix, connector):
         """
