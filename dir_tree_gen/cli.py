@@ -27,13 +27,19 @@ parser.add_argument(
     default=".",
     help="Generate a full directory tree starting at ROOT_DIR",
 )
+parser.add_argument(
+    "-d",
+    "--dir-only",
+    action="store_true",
+    help="Generate a directory-only tree",
+)
 
 
 def main():
     """
     main calls parse_cmd_line_arguments() and pack the command line arguments in args.
 
-    It then turn the root directory into a pathlib.Path object.
+    It then turns the root directory into a pathlib.Path object.
     Finally, create a DirectoryTree object using root_dir as an argument and call .generate() on it to generate and display the corresponding directory tree diagram on your terminal window.
 
     Returns
@@ -45,5 +51,5 @@ def main():
     if not root_dir.is_dir():
         print("The specified root directory doesn't exist")
         sys.exit()
-    tree = DirectoryTree(root_dir)
+    tree = DirectoryTree(root_dir, dir_only=args.dir_only)
     tree.generate()
