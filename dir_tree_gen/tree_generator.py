@@ -5,17 +5,9 @@ _tree_generator holds the components (branches, roots, pipes, tees, etc.) of the
 import os
 import pathlib
 
-_PIPE = "│"
-"""str: A connection piece between the root directory and the rest of the tree."""
-_ELBOW = "└──"
-"""str: A connection piece between the terminal element in a directory and the tree branch/trunk."""
-_TEE = "├──"
-"""str: A connection piece between the current directory and its components."""
-_PIPE_PREFIX = "│   "
-"""
-str: A connection piece that spaces out elements between sudirectories.
-"""
-_SPACE_PREFIX = "    "
+from dir_tree_gen.tree_dict import tree_dict
+
+tree_dict
 
 
 class TreeGenerator:
@@ -61,7 +53,7 @@ class TreeGenerator:
         None
         """
         self._tree.append(f"{self._root_dir}{os.sep}")
-        self._tree.append(_PIPE)
+        self._tree.append(tree_dict["pipe"])
 
     def _tree_body(self, directory, prefix=""):
         """
@@ -88,7 +80,7 @@ class TreeGenerator:
         entries = self._prepare_entries(directory)
         entries_count = len(entries)
         for index, entry in enumerate(entries):
-            connector = _ELBOW if index == entries_count - 1 else _TEE
+            connector = tree_dict["elbow"] if index == entries_count - 1 else tree_dict["tee"]
             self._check_if_dir(entry, index, entries_count, prefix, connector)
 
     def _prepare_entries(self, directory):
@@ -185,9 +177,9 @@ class TreeGenerator:
         None
         """
         if index != entries_count - 1:
-            prefix += _PIPE_PREFIX
+            prefix += tree_dict["pipe prefix"]
         else:
-            prefix += _SPACE_PREFIX
+            prefix += tree_dict["space prefix"]
         self._tree_body(
             directory=directory,
             prefix=prefix
