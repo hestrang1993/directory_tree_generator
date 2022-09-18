@@ -7,8 +7,6 @@ import pathlib
 
 from dir_tree_gen.tree_dict import tree_dict
 
-tree_dict
-
 
 class TreeGenerator:
     """_TreeGenerator traverses the file system and generates the directory tree diagram."""
